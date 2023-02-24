@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Add a default marker to a web map</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoidml2aWR2aWNlIiwiYSI6ImNsZWliamk5bzBwNzk0Y3Fsa2hudHcxaGoifQ.8t0Cg1y1GjsZvw2RTLcCsw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-122.4194, 37.7749],
+        zoom: 12
+    });
+    map.on('load', function () {
+        map.addSource('places', {
+            type: 'vector',
+            url: 'mapbox://vividvice.7lcpgool'
+        });
+        map.loadImage('https://cdn-icons-png.flaticon.com/512/25/25613.png', (error, image) => {
+            if (error) throw error;
+            map.addImage('marker', image);
+        });
+        map.addLayer({
+            id: 'places-layer',
+            type: 'symbol',
+            source: 'places',
+            'source-layer': 'wonders_cord-04woh7',
+            layout: {
+                'icon-image': 'marker',
+                'icon-allow-overlap': false,
+                'icon-size': ['interpolate', ['exponential', 1.5], ['zoom'], 10, 0.05, 22, 0.025]
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
